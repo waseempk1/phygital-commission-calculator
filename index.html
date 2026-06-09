@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Phygital Commission Calculator - June 2026</title>
+  <style>
+    :root{
+      --navy:#0b2c6b; --teal:#0f766e; --bg:#f3f6fb; --card:#ffffff;
+      --muted:#64748b; --line:#dbe3ef; --input:#fff7d6; --green:#dcfce7;
+      --danger:#b91c1c; --text:#0f172a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1180px;margin:0 auto;padding:24px}
+    .hero{background:linear-gradient(135deg,var(--navy),#134e8a);color:#fff;border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:0 10px 30px rgba(15,23,42,.14)}
+    .hero h1{margin:0 0 8px;font-size:28px}
+    .hero p{margin:0;color:#dbeafe;line-height:1.5}
+    .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;align-items:start}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+    .card h2{margin:0 0 14px;font-size:19px;color:var(--navy)}
+    .section-title{margin:18px 0 10px;font-weight:700;color:var(--teal);font-size:15px;text-transform:uppercase;letter-spacing:.03em}
+    label{display:block;font-weight:700;margin:11px 0 6px;font-size:14px}
+    .hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+    input{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;background:var(--input);font-size:15px;outline:none}
+    input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,118,110,.15)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+    table{width:100%;border-collapse:collapse;min-width:650px;background:#fff}
+    th{background:var(--teal);color:#fff;text-align:left;padding:10px;font-size:13px;white-space:nowrap}
+    td{border-top:1px solid var(--line);padding:10px;font-size:13px;vertical-align:middle}
+    td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .auto{background:var(--green);font-weight:700}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+    .kpi{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px}
+    .kpi .label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .kpi .value{font-size:22px;font-weight:800;margin-top:8px;color:var(--navy)}
+    .kpi.net{background:#ecfdf5;border-color:#bbf7d0}.kpi.net .value{color:#166534}
+    .kpi.tax{background:#fff7ed;border-color:#fed7aa}.kpi.tax .value{color:#9a3412}
+    .breakdown td:last-child{color:var(--muted)}
+    .negative{color:var(--danger);font-weight:700}
+    .footer-note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff}
+    button.secondary{background:#e2e8f0;color:#0f172a}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.two{grid-template-columns:1fr}.wrap{padding:14px}.hero h1{font-size:23px}}
+    @media print{body{background:#fff}.wrap{max-width:none}.card,.hero{box-shadow:none}.btnrow{display:none}.grid{grid-template-columns:1fr}.hero{color:#000;background:#fff;border:1px solid #ddd}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Phygital Commission Calculator - June 2026</h1>
+      <p>Business partners can enter expected month-end performance and see estimated gross and net commission. Net commission uses an approximate 86% tax factor.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Inputs</h2>
+        <div class="two">
+          <div>
+            <label for="target">Target</label>
+            <input id="target" type="number" min="0" step="1" value="500" />
+            <div class="hint">Monthly target activations.</div>
+          </div>
+          <div>
+            <label for="qos">Expected QoS at month end (%)</label>
+            <input id="qos" type="number" min="0" step="0.1" value="45" />
+            <div class="hint">Example: enter 45 for 45%.</div>
+          </div>
+          <div>
+            <label for="achievement">Expected activations excluding weekly at month end (%)</label>
+            <input id="achievement" type="number" min="0" step="0.1" value="115" />
+            <div class="hint">Includes monthly, group plans, bi-yearly, yearly/exclusive.</div>
+          </div>
+          <div>
+            <label for="first15">Expected achievement in first 15 days (%)</label>
+            <input id="first15" type="number" min="0" step="0.1" value="50" />
+            <div class="hint">Last 15 days are calculated automatically.</div>
+          </div>
+          <div>
+            <label for="mnpPct">Expected Non-Ufone MNP (%)</label>
+            <input id="mnpPct" type="number" min="0" step="0.1" value="10" />
+            <div class="hint">Calculated on total expected eligible activations.</div>
+          </div>
+          <div>
+            <label for="taxFactor">Net payout factor after tax (%)</label>
+            <input id="taxFactor" type="number" min="0" max="100" step="0.1" value="86" />
+            <div class="hint">Approximate factor: net = gross × 86%.</div>
+          </div>
+        </div>
+
+        <div class="section-title">Plan counts</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Plan</th><th>Count</th><th>Rate</th><th>BDO Support</th><th>Commission</th></tr></thead>
+            <tbody id="planRows"></tbody>
+          </table>
+        </div>
+        <div class="footer-note">Monthly plan count is auto-calculated: expected eligible activations minus group, bi-yearly, and yearly/exclusive counts. Weekly is not included in target achievement.</div>
+        <div class="btnrow">
+          <button type="button" onclick="window.print()">Print / Save PDF</button>
+          <button type="button" class="secondary" id="resetBtn">Reset sample</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Expected Commission</h2>
+        <div class="summary">
+          <div class="kpi"><div class="label">Gross commission</div><div class="value" id="grossKpi">PKR 0</div></div>
+          <div class="kpi tax"><div class="label">Approx. tax / deduction</div><div class="value" id="taxKpi">PKR 0</div></div>
+          <div class="kpi net"><div class="label">Expected net commission</div><div class="value" id="netKpi">PKR 0</div></div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="breakdown">
+            <thead><tr><th>Commission Type</th><th>Qty</th><th>Rate</th><th>Commission</th><th>Notes</th></tr></thead>
+            <tbody id="breakdownRows"></tbody>
+          </table>
+        </div>
+
+        <div class="section-title">Backend calculations</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Metric</th><th>Value</th><th>Metric</th><th>Value</th></tr></thead>
+            <tbody id="backendRows"></tbody>
+          </table>
+        </div>
+        <div class="footer-note">This is an estimate before final validations, policy checks, taxes, withholding, disqualification, or management adjustments.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const planConfig = [
+      { key:'weekly', label:'Weekly', rate:250, support:500, editable:true, note:'Weekly excluded from target achievement' },
+      { key:'monthly', label:'Monthly', rate:700, support:500, editable:false, note:'Auto-calculated' },
+      { key:'group2', label:'Group 2-in-1', rate:1000, support:500, editable:true, note:'' },
+      { key:'group3', label:'Group 3-in-1', rate:1200, support:500, editable:true, note:'' },
+      { key:'group5', label:'Group 5-in-1', rate:1500, support:500, editable:true, note:'' },
+      { key:'biyearly', label:'Bi-yearly', rate:1000, support:500, editable:true, note:'' },
+      { key:'yearly', label:'Yearly/Exclusive', rate:1500, support:500, editable:true, note:'' }
+    ];
+
+    const sample = {
+      target:500, qos:45, achievement:115, first15:50, mnpPct:10, taxFactor:86,
+      weekly:3, group2:1, group3:2, group5:3, biyearly:5, yearly:1
+    };
+
+    const fmt = new Intl.NumberFormat('en-PK', { maximumFractionDigits:0 });
+    const pkr = v => 'PKR ' + fmt.format(Math.round(v || 0));
+    const n = id => Number(document.getElementById(id).value) || 0;
+    const pct = id => n(id) / 100;
+    const round = v => Math.round(v || 0);
+
+    function inputCell(key, value){
+      return `<input id="${key}" type="number" min="0" step="1" value="${value}">`;
+    }
+
+    function renderPlanInputs(){
+      const body = document.getElementById('planRows');
+      body.innerHTML = planConfig.map(p => {
+        const countCell = p.editable
+          ? inputCell(p.key, sample[p.key] || 0)
+          : `<span id="${p.key}" class="auto">0</span>`;
+        return `<tr>
+          <td><strong>${p.label}</strong><div class="hint">${p.note || ''}</div></td>
+          <td class="num">${countCell}</td>
+          <td class="num">${pkr(p.rate)}</td>
+          <td class="num">${pkr(p.support)}</td>
+          <td class="num auto" id="${p.key}Commission">${pkr(0)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function getPlanCounts(expectedEligible){
+      const counts = {
+        weekly:n('weekly'), group2:n('group2'), group3:n('group3'), group5:n('group5'), biyearly:n('biyearly'), yearly:n('yearly')
+      };
+      const otherEligible = counts.group2 + counts.group3 + counts.group5 + counts.biyearly + counts.yearly;
+      counts.monthly = Math.max(0, expectedEligible - otherEligible);
+      return { counts, otherEligible };
+    }
+
+    function tvaRate(achievementPct){
+      if (achievementPct < 0.50) return -300;
+      if (achievementPct < 0.75) return -200;
+      if (achievementPct < 0.90) return -100;
+      if (achievementPct < 1.00) return 0;
+      if (achievementPct < 1.10) return 200;
+      if (achievementPct < 1.15) return 300;
+      return 400;
+    }
+
+    function qosRate(qosPct){
+      if (qosPct < 0.30) return -300;
+      if (qosPct < 0.40) return -200;
+      if (qosPct < 0.45) return 200;
+      if (qosPct < 0.55) return 400;
+      return 600;
+    }
+
+    function campaignSlab(achievementPct){
+      if (achievementPct >= 1.30) return '130%+';
+      if (achievementPct >= 1.15) return '115%+';
+      if (achievementPct >= 1.00) return '100%';
+      return 'Below 100%';
+    }
+
+    function campaignRates(achievementPct, qosPct){
+      const eligible = achievementPct >= 1.00 && qosPct >= 0.45;
+      if (!eligible) return { eligible:false, first:0, last:0 };
+      if (achievementPct >= 1.30) return { eligible:true, first:300, last:200 };
+      if (achievementPct >= 1.15) return { eligible:true, first:200, last:100 };
+      return { eligible:true, first:100, last:0 };
+    }
+
+    function recalc(){
+      const target = n('target');
+      const qosPct = pct('qos');
+      const achievementPct = pct('achievement');
+      const first15Pct = pct('first15');
+      const mnpPct = pct('mnpPct');
+      const taxFactor = pct('taxFactor');
+
+      const expectedEligible = round(target * achievementPct);
+      const first15Acts = round(expectedEligible * first15Pct);
+      const last15Acts = Math.max(0, expectedEligible - first15Acts);
+      const nonUfoneMnpCount = round(expectedEligible * mnpPct);
+      const { counts, otherEligible } = getPlanCounts(expectedEligible);
+      document.getElementById('monthly').textContent = fmt.format(counts.monthly);
+
+      let activationCommission = 0;
+      planConfig.forEach(p => {
+        const count = counts[p.key] || 0;
+        const commission = count * (p.rate + p.support);
+        activationCommission += commission;
+        document.getElementById(`${p.key}Commission`).textContent = pkr(commission);
+      });
+
+      const tva = tvaRate(achievementPct);
+      const qos = qosRate(qosPct);
+      const camp = campaignRates(achievementPct, qosPct);
+      const tvaCommission = expectedEligible * tva;
+      const qosCommission = counts.monthly * qos;
+      const firstCampaignCommission = first15Acts * camp.first;
+      const lastCampaignCommission = last15Acts * camp.last;
+      const mnpCommission = nonUfoneMnpCount * (camp.eligible ? 400 : 0);
+      const gross = activationCommission + tvaCommission + qosCommission + firstCampaignCommission + lastCampaignCommission + mnpCommission;
+      const net = gross * taxFactor;
+      const tax = gross - net;
+
+      document.getElementById('grossKpi').textContent = pkr(gross);
+      document.getElementById('taxKpi').textContent = pkr(tax);
+      document.getElementById('netKpi').textContent = pkr(net);
+
+      const rows = [
+        ['Activation Commission', counts.weekly + counts.monthly + counts.group2 + counts.group3 + counts.group5 + counts.biyearly + counts.yearly, '', activationCommission, 'Normal committed payout incl. PKR 500 support'],
+        ['TVA Commission', expectedEligible, tva, tvaCommission, 'Target achievement payout'],
+        ['QoS Commission', counts.monthly, qos, qosCommission, 'Monthly plan count is auto-calculated'],
+        ['First 15 Days Campaign Commission', first15Acts, camp.first, firstCampaignCommission, 'On top of normal payout'],
+        ['Last 15 Days Campaign Commission', last15Acts, camp.last, lastCampaignCommission, 'Backend calculated'],
+        ['MNP Commission', nonUfoneMnpCount, camp.eligible ? 400 : 0, mnpCommission, 'Non-Ufone MNP only'],
+        ['Estimated Gross Commission', '', '', gross, 'Before tax/deduction'],
+        ['Expected Net Commission', '', `${Math.round(taxFactor*100)}%`, net, 'After approximate tax factor']
+      ];
+      document.getElementById('breakdownRows').innerHTML = rows.map(r => `<tr>
+        <td><strong>${r[0]}</strong></td><td class="num">${r[1] === '' ? '' : fmt.format(r[1])}</td><td class="num ${Number(r[2]) < 0 ? 'negative' : ''}">${r[2] === '' ? '' : pkr(r[2])}</td><td class="num ${r[3] < 0 ? 'negative' : ''}"><strong>${pkr(r[3])}</strong></td><td>${r[4]}</td>
+      </tr>`).join('');
+
+      const backend = [
+        ['Expected month-end eligible activations', fmt.format(expectedEligible), 'First 15 days expected activations', fmt.format(first15Acts)],
+        ['Remaining 15 days expected activations', fmt.format(last15Acts), 'Other eligible plans entered', fmt.format(otherEligible)],
+        ['Calculated Non-Ufone MNP Count', fmt.format(nonUfoneMnpCount), 'Campaign eligible?', camp.eligible ? 'Yes' : 'No'],
+        ['Campaign slab', campaignSlab(achievementPct), 'First 15 days campaign rate', pkr(camp.first)],
+        ['Last 15 days campaign rate', pkr(camp.last), 'TVA rate', pkr(tva)],
+        ['QoS rate', pkr(qos), 'Tax factor', `${Math.round(taxFactor*1000)/10}%`]
+      ];
+      document.getElementById('backendRows').innerHTML = backend.map(r => `<tr><td>${r[0]}</td><td class="num auto">${r[1]}</td><td>${r[2]}</td><td class="num auto">${r[3]}</td></tr>`).join('');
+    }
+
+    function resetSample(){
+      Object.entries(sample).forEach(([k,v]) => {
+        const el = document.getElementById(k);
+        if (el && el.tagName === 'INPUT') el.value = v;
+      });
+      recalc();
+    }
+
+    renderPlanInputs();
+    resetSample();
+    document.querySelectorAll('input').forEach(el => el.addEventListener('input', recalc));
+    document.getElementById('resetBtn').addEventListener('click', resetSample);
+  </script>
+</body>
+</html>
