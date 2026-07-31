@@ -32,7 +32,7 @@ input[readonly]{background:var(--output);font-weight:700}
 <div><label>Non-Ufone MNP (%)</label><input id="mnpPct" type="number" min="0" step="0.01" value="10"></div>
 <div><label>Weekly packages in QoS (%)</label><input id="weeklyPct" type="number" min="0" step="0.01" value="0"><small>Effective QoS = QoS - weekly</small></div>
 <div><label>Expected self-pickups</label><input id="selfPickup" type="number" min="0" step="1" value="0"><small>Additional revenue, not sales</small></div>
-<div><label>Self-pickup rate</label><input id="selfPickupRateDisplay" type="text" value="PKR 0" readonly><small>200 base, 300 at 100%, 400 at 115%</small></div>
+<div><label>Self-pickup rate</label><input id="selfPickupRateDisplay" type="text" value="PKR 0" readonly><small>150 base, 300 at 100%, 400 at 115%</small></div>
 </div>
 </section>
 
@@ -53,7 +53,7 @@ input[readonly]{background:var(--output);font-weight:700}
 <h2>Plan Counts</h2>
 <table><thead><tr><th>Plan</th><th class="num">Count</th><th class="num hide-mobile">Rate</th><th class="num">Commission</th></tr></thead><tbody>
 <tr><td>Weekly</td><td><input id="weekly" type="number" min="0" step="1" value="0"></td><td class="num hide-mobile">750</td><td class="num readonly" id="weeklyComm">PKR 0</td></tr>
-<tr><td>Monthly</td><td class="num readonly" id="monthlyCount">0</td><td class="num hide-mobile">1,200</td><td class="num readonly" id="monthlyComm">PKR 0</td></tr>
+<tr><td>Monthly</td><td class="num readonly" id="monthlyCount">0</td><td class="num hide-mobile">150</td><td class="num readonly" id="monthlyComm">PKR 0</td></tr>
 <tr><td>Group 2-in-1</td><td><input id="group2" type="number" min="0" step="1" value="0"></td><td class="num hide-mobile">1,500</td><td class="num readonly" id="group2Comm">PKR 0</td></tr>
 <tr><td>Group 3-in-1</td><td><input id="group3" type="number" min="0" step="1" value="0"></td><td class="num hide-mobile">1,700</td><td class="num readonly" id="group3Comm">PKR 0</td></tr>
 <tr><td>Group 5-in-1</td><td><input id="group5" type="number" min="0" step="1" value="0"></td><td class="num hide-mobile">2,000</td><td class="num readonly" id="group5Comm">PKR 0</td></tr>
